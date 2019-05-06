@@ -3,6 +3,8 @@ package me.olook.songrank.proxypool.task;
 import lombok.extern.slf4j.Slf4j;
 import me.olook.songrank.proxypool.provider.impl.GatherProxyProvider;
 import org.apache.http.HttpHost;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,9 +14,11 @@ import java.util.List;
  * @date 2019-05-06 16:58
  */
 @Slf4j
+@Component
 public class GatherProxyGetTask implements Runnable{
 
-    private GatherProxyProvider provider = new GatherProxyProvider();
+    @Autowired
+    private GatherProxyProvider provider;
 
     @Override
     public void run() {

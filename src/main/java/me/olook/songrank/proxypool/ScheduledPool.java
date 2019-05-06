@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import me.olook.songrank.proxypool.task.GatherProxyGetTask;
 import me.olook.songrank.proxypool.task.GatherProxySyncTask;
 import me.olook.songrank.proxypool.task.PeriodSyncTask;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,7 +17,17 @@ import java.util.concurrent.TimeUnit;
  * @date 2019-05-06 15:47
  */
 @Slf4j
+@Component
 public class ScheduledPool {
+
+    @Autowired
+    private PeriodSyncTask periodSyncTask;
+
+    @Autowired
+    private GatherProxySyncTask proxySyncTask;
+
+    @Autowired
+    private GatherProxyGetTask gatherProxyGetTask;
 
     private static ScheduledFuture<?> proxySyncFuture;
 
@@ -23,32 +35,32 @@ public class ScheduledPool {
 
     private static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-    public static void addPeriodSyncTask(){
+    public void addPeriodSyncTask(){
         log.info("添加周期时间同步任务");
-        scheduledExecutorService.scheduleAtFixedRate(new PeriodSyncTask(), 0, 6, TimeUnit.HOURS);
+        scheduledExecutorService.scheduleAtFixedRate(periodSyncTask, 0, 6, TimeUnit.HOURS);
     }
 
-    public static void addProxySyncTask(){
+    public void addProxySyncTask(){
         log.info("添加代理同步任务");
         proxySyncFuture = null;
         proxySyncFuture = scheduledExecutorService.
-                scheduleAtFixedRate(new GatherProxySyncTask(), 0, 2, TimeUnit.SECONDS);
+                scheduleAtFixedRate(proxySyncTask, 0, 2, TimeUnit.SECONDS);
     }
 
-    public static void stopProxySyncTask(){
+    public void stopProxySyncTask(){
         log.info("移除代理同步任务");
         if (proxySyncFuture != null) {
             proxySyncFuture.cancel(true);
         }
     }
-    public static void addProxyGetTask(){
+    public void addProxyGetTask(){
         log.info("添加代理请求任务");
         proxyGetFuture = null;
         proxyGetFuture = scheduledExecutorService
-                .scheduleAtFixedRate(new GatherProxyGetTask(), 0, 3, TimeUnit.MINUTES);
+                .scheduleAtFixedRate(gatherProxyGetTask, 0, 3, TimeUnit.MINUTES);
     }
 
-    public static void stopProxyGetTask(){
+    public void stopProxyGetTask(){
         log.info("移除代理请求任务");
         if (proxyGetFuture != null) {
             proxyGetFuture.cancel(true);

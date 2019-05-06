@@ -20,6 +20,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,7 +33,11 @@ import java.util.stream.Collectors;
  * @date 2019-05-06 16:02
  */
 @Slf4j
+@Component
 public class GatherProxyProvider extends BaseVpnProxyProvider {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     private static final String TEST_URL = "https://music.163.com/weapi/v1/play/record?" +
             "params=OMUybrnN%2B6ELSzpZkRWe231b2b9yUKz1R40sylwNkSRXly6B1gWZm95kQ2iZuB81JnOvyLbKUqII%0D%0AjZDk" +
@@ -86,6 +93,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             HttpResponse response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("weekData")){
+                redisTemplate.opsForList().leftPush("proxypool",httpHost);
                log.info("accept proxy {}",httpHost);
             }
         } catch (IOException e) {
