@@ -15,7 +15,7 @@
             <level>INFO</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/proxy_info.log</fileNamePattern>
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/proxy_pool_info.log</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -23,7 +23,7 @@
             <charset>${charset}</charset>
         </encoder>
     </appender>
-    <logger name="me.olook.netease.song.rank.util.proxy" level="DEBUG" additivity="false">
+    <logger name="me.olook.songrank.proxypool" level="DEBUG" additivity="false">
         <appender-ref ref="proxy_info" />
     </logger>
     <logger name="org.apache.http.impl.execchain" level="OFF">
