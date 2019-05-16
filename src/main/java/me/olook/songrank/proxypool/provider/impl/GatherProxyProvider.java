@@ -39,6 +39,8 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    private static final String REDIS_KEY = "proxypool";
+
     private static final String TEST_URL = "https://music.163.com/weapi/v1/play/record?" +
             "params=OMUybrnN%2B6ELSzpZkRWe231b2b9yUKz1R40sylwNkSRXly6B1gWZm95kQ2iZuB81JnOvyLbKUqII%0D%0AjZDk" +
             "Ur4xoaKu6XQLH5W7ofChQtSucSexc13PZZvrI60tuw6aIjnCmZkyt9VFfS0uCZ8dpiB11CjQ%0D%0AiHgMNitSrMl51NOJ9" +
@@ -93,7 +95,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             HttpResponse response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("weekData")){
-                redisTemplate.opsForList().leftPush("proxypool",httpHost);
+                redisTemplate.opsForList().leftPush(REDIS_KEY,httpHost);
                log.info("accept proxy {}",httpHost);
             }
         } catch (IOException e) {

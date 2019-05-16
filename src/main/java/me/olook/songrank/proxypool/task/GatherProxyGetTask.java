@@ -17,14 +17,16 @@ import java.util.List;
 @Component
 public class GatherProxyGetTask implements Runnable{
 
+    private static int indexBegin = 1;
+
     @Autowired
     private GatherProxyProvider provider;
 
     @Override
     public void run() {
-        log.info("代理抓取开始");
+        log.info("代理抓取开始,{}页开始",indexBegin);
         LocalDateTime end = LocalDateTime.now().plusMinutes(2).plusSeconds(15);
-        Integer index = 1;
+        Integer index = indexBegin;
         while (LocalDateTime.now().compareTo(end)<0){
             String payload = provider.requestForPayload(index);
             List<HttpHost> httpHosts = provider.resolveProxy(payload);
@@ -33,6 +35,11 @@ public class GatherProxyGetTask implements Runnable{
             });
             index++;
         }
-        log.info("本轮抓取结束，共获取{}页数据",index-1);
+        log.info("本轮抓取结束，{}页结束，共抓取{}页数据",index,index-indexBegin);
+    }
+
+    public static void setIndexBegin(int indexBegin) {
+        log.info("设置代理抓取起始页为 {}",indexBegin);
+        GatherProxyGetTask.indexBegin = indexBegin;
     }
 }
