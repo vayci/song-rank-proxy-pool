@@ -24,18 +24,23 @@ public class GatherProxyGetTask implements Runnable{
 
     @Override
     public void run() {
-        log.info("代理抓取开始,{}页开始",indexBegin);
-        LocalDateTime end = LocalDateTime.now().plusMinutes(2).plusSeconds(15);
-        Integer index = indexBegin;
-        while (LocalDateTime.now().compareTo(end)<0){
-            String payload = provider.requestForPayload(index);
-            List<HttpHost> httpHosts = provider.resolveProxy(payload);
-            httpHosts.parallelStream().forEach(host->{
-                provider.checkAndSaveProxy(host);
-            });
-            index++;
+        if(provider.needFill()){
+            log.info("代理抓取开始,{}页开始",indexBegin);
+            LocalDateTime end = LocalDateTime.now().plusMinutes(2).plusSeconds(15);
+            Integer index = indexBegin;
+            while (LocalDateTime.now().compareTo(end)<0){
+                String payload = provider.requestForPayload(index);
+                List<HttpHost> httpHosts = provider.resolveProxy(payload);
+                httpHosts.parallelStream().forEach(host->{
+                    provider.checkAndSaveProxy(host);
+                });
+                index++;
+            }
+            log.info("本轮抓取结束，{}页结束，共抓取{}页数据",index,index-indexBegin);
+        }else{
+            log.info("代理池状态良好，无需补充");
         }
-        log.info("本轮抓取结束，{}页结束，共抓取{}页数据",index,index-indexBegin);
+
     }
 
     public static void setIndexBegin(int indexBegin) {

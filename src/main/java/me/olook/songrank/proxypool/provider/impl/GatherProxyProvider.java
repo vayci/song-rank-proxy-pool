@@ -41,6 +41,8 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
 
     private static final String REDIS_KEY = "proxypool";
 
+    private static final int PROXY_POOL_LIMIT = 100;
+
     private static final String TEST_URL = "https://music.163.com/weapi/v1/play/record?" +
             "params=OMUybrnN%2B6ELSzpZkRWe231b2b9yUKz1R40sylwNkSRXly6B1gWZm95kQ2iZuB81JnOvyLbKUqII%0D%0AjZDk" +
             "Ur4xoaKu6XQLH5W7ofChQtSucSexc13PZZvrI60tuw6aIjnCmZkyt9VFfS0uCZ8dpiB11CjQ%0D%0AiHgMNitSrMl51NOJ9" +
@@ -82,6 +84,13 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             Integer port = Integer.parseInt(portStr, 16);
             return new HttpHost(ip.toString(),port);
         }).collect(Collectors.toList());
+    }
+
+    public boolean needFill(){
+        Long size = redisTemplate.opsForList().size(REDIS_KEY);
+        log.info("当前代理池数量 {}",size);
+        return size <= PROXY_POOL_LIMIT;
+
     }
 
     public void checkAndSaveProxy(HttpHost httpHost){
