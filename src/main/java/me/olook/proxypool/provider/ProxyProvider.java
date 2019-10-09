@@ -1,4 +1,4 @@
-package me.olook.songrank.proxypool.provider;
+package me.olook.proxypool.provider;
 
 import org.apache.http.HttpHost;
 

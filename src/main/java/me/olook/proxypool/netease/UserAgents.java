@@ -1,4 +1,4 @@
-package me.olook.songrank.proxypool.netease;
+package me.olook.proxypool.netease;
 
 import java.util.Random;
 

@@ -1,5 +1,6 @@
-package me.olook.songrank.proxypool;
+package me.olook.proxypool.task;
 
+import me.olook.proxypool.ProxyPoolProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,12 +15,23 @@ public class ProxyTaskRunner implements ApplicationRunner {
     private final ScheduledPool scheduledPool;
 
     @Autowired
+    private ProxyPoolProperties properties;
+
+    @Autowired
     public ProxyTaskRunner(ScheduledPool scheduledPool) {
         this.scheduledPool = scheduledPool;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        scheduledPool.addPeriodSyncTask();
+        if(properties.getSync().isPeriodSync()){
+            scheduledPool.addPeriodSyncTask();
+        }
+        else if(properties.getSync().isProxySync()){
+            scheduledPool.addProxySyncTask();
+        }
+        else {
+            scheduledPool.addProxyGetTask(properties.getGather().getInterval());
+        }
     }
 }

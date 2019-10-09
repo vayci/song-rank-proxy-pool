@@ -1,7 +1,6 @@
-package me.olook.songrank.proxypool.task;
+package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.songrank.proxypool.ScheduledPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

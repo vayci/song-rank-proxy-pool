@@ -1,11 +1,8 @@
-package me.olook.songrank.proxypool.provider.impl;
+package me.olook.proxypool.provider.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import me.olook.songrank.proxypool.netease.NetEaseApiUrl;
-import me.olook.songrank.proxypool.netease.NetEaseEncryptUtil;
-import me.olook.songrank.proxypool.netease.UserAgents;
-import me.olook.songrank.proxypool.provider.BaseVpnProxyProvider;
+import me.olook.proxypool.ProxyPoolProperties;
+import me.olook.proxypool.netease.UserAgents;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
@@ -14,6 +11,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -21,11 +19,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -34,14 +35,20 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class GatherProxyProvider extends BaseVpnProxyProvider {
+@EnableConfigurationProperties
+public class GatherProxyProvider {
 
     @Autowired
     private RedisTemplate redisTemplate;
 
-    private static final String REDIS_KEY = "proxypool";
+    @Autowired
+    private ProxyPoolProperties properties;
 
-    private static final int PROXY_POOL_LIMIT = 100;
+    @Autowired
+    private RequestConfig requestConfig;
+
+    @Autowired
+    private CloseableHttpClient httpClient;
 
     private static final String TEST_URL = "https://music.163.com/weapi/v1/play/record?" +
             "params=OMUybrnN%2B6ELSzpZkRWe231b2b9yUKz1R40sylwNkSRXly6B1gWZm95kQ2iZuB81JnOvyLbKUqII%0D%0AjZDk" +
@@ -49,6 +56,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             "4fw2UlQMcDXLZTsXj9fpYWL&encSecKey=257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7" +
             "a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffc" +
             "a5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c";
+
 
     public String requestForPayload(Integer index) {
         String url = "http://www.gatherproxy.com/proxylist/anonymity/?t=Elite";
@@ -63,7 +71,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             HttpResponse response = httpClient.execute(request);
             return EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
         } catch (IOException e) {
-            log.error("数据请求出错");
+            log.error("data acquisition error , check your network ");
             return null;
         }
     }
@@ -87,9 +95,12 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
     }
 
     public boolean needFill(){
-        Long size = redisTemplate.opsForList().size(REDIS_KEY);
-        log.info("当前代理池数量 {}",size);
-        return size <= PROXY_POOL_LIMIT;
+        if(properties.getLimit()<=0){
+            return true;
+        }
+        Long size = redisTemplate.opsForList().size(properties.getKey());
+        log.info("active proxy pool size: {} , threshold: {}",size,properties.getLimit());
+        return size <= properties.getLimit();
 
     }
 
@@ -104,7 +115,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
             HttpResponse response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("weekData")){
-                redisTemplate.opsForList().leftPush(REDIS_KEY,httpHost);
+                redisTemplate.opsForList().leftPush(properties.getKey(),httpHost);
                log.info("accept proxy {}",httpHost);
             }
         } catch (IOException e) {
@@ -120,21 +131,7 @@ public class GatherProxyProvider extends BaseVpnProxyProvider {
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
         request.setHeader(HttpHeaders.HOST, "music.163.com");
         request.setHeader(HttpHeaders.REFERER, "http://music.163.com/");
-        request.setHeader(HttpHeaders.USER_AGENT,UserAgents.randomUserAgent());
-    }
-
-    public static void main(String[] args) {
-        Map<String,String> map = new HashMap<>();
-        map.put("type","1");
-        map.put("limit","1000");
-        map.put("offset","0");
-        map.put("total","true");
-        map.put("csrf_token","");
-        map.put("uid","35063071");
-        String json = JSONObject.toJSONString(map);
-        String urlParams = NetEaseEncryptUtil.getUrlParams(json);
-        String url = NetEaseApiUrl.RECORD+urlParams;
-        System.out.println(url);
+        request.setHeader(HttpHeaders.USER_AGENT, UserAgents.randomUserAgent());
     }
 
 }

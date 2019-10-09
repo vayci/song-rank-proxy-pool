@@ -1,7 +1,8 @@
-package me.olook.songrank.proxypool.task;
+package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.songrank.proxypool.provider.impl.GatherProxyProvider;
+import me.olook.proxypool.ProxyPoolProperties;
+import me.olook.proxypool.provider.impl.GatherProxyProvider;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,8 @@ import java.util.List;
 @Component
 public class GatherProxyGetTask implements Runnable{
 
-    private static int indexBegin = 1;
+    @Autowired
+    private ProxyPoolProperties properties;
 
     @Autowired
     private GatherProxyProvider provider;
@@ -25,9 +27,9 @@ public class GatherProxyGetTask implements Runnable{
     @Override
     public void run() {
         if(provider.needFill()){
-            log.info("代理抓取开始,{}页开始",indexBegin);
+            log.info("begin get data from page: {}",properties.getGather().getStartPage());
             LocalDateTime end = LocalDateTime.now().plusMinutes(2).plusSeconds(15);
-            Integer index = indexBegin;
+            Integer index = properties.getGather().getStartPage();
             while (LocalDateTime.now().compareTo(end)<0){
                 String payload = provider.requestForPayload(index);
                 List<HttpHost> httpHosts = provider.resolveProxy(payload);
@@ -36,15 +38,11 @@ public class GatherProxyGetTask implements Runnable{
                 });
                 index++;
             }
-            log.info("本轮抓取结束，{}页结束，共抓取{}页数据",index,index-indexBegin);
+            log.info("stop get data in page： {} , total {} pages",index,index-properties.getGather().getStartPage());
         }else{
-            log.info("代理池状态良好，无需补充");
+            log.info("proxy pool has reached the threshold .");
         }
 
     }
 
-    public static void setIndexBegin(int indexBegin) {
-        log.info("设置代理抓取起始页为 {}",indexBegin);
-        GatherProxyGetTask.indexBegin = indexBegin;
-    }
 }

@@ -1,8 +1,8 @@
-package me.olook.songrank.proxypool.task;
+package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.songrank.proxypool.ScheduledPool;
-import me.olook.songrank.proxypool.provider.impl.GatherProxyProvider;
+import me.olook.proxypool.ProxyPoolProperties;
+import me.olook.proxypool.provider.impl.GatherProxyProvider;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,11 @@ public class GatherProxySyncTask implements Runnable{
     @Autowired
     private ScheduledPool scheduledPool;
 
-    private GatherProxyProvider provider = new GatherProxyProvider();
+    @Autowired
+    private GatherProxyProvider provider;
+
+    @Autowired
+    private ProxyPoolProperties properties;
 
     private HttpHost firstHost;
 
@@ -31,10 +35,10 @@ public class GatherProxySyncTask implements Runnable{
             List<HttpHost> httpHosts = provider.resolveProxy(payload);
             if(firstHost == null){ firstHost = httpHosts.get(0); }
             else if(!firstHost.equals(httpHosts.get(0))){
-                log.info("数据变更,同步完成");
+                log.info("data change detected , sync ok .");
                 scheduledPool.stopProxySyncTask();
                 scheduledPool.stopProxyGetTask();
-                scheduledPool.addProxyGetTask();
+                scheduledPool.addProxyGetTask(properties.getGather().getInterval());
             }
         }
     }
