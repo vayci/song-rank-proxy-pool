@@ -4,7 +4,9 @@ spring:
     port: 6379
     password: passwd
 proxy:
-  enable-vpn: true
+  key: proxypool
+  limit: 100
+  enable-vpn: false
   vpn-host: 127.0.0.1
   vpn-port: 10809
   gather:
@@ -13,4 +15,3 @@ proxy:
   sync:
     period-sync: true
     proxy-sync: true
-  limit: 100

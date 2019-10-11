@@ -3,7 +3,7 @@
     <jmxConfigurator/>
 
     <!-- 定义日志文件 输入位置 -->
-    <property name="log_dir" value="/software/song-rank-log" />
+    <property name="log_dir" value="/var/log/proxypool/${PID}" />
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
     <!-- 文件编码 -->
@@ -23,7 +23,7 @@
             <charset>${charset}</charset>
         </encoder>
     </appender>
-    <logger name="me.olook.songrank.proxypool" level="DEBUG" additivity="false">
+    <logger name="me.olook.proxypool" level="DEBUG" additivity="false">
         <appender-ref ref="proxy_info" />
     </logger>
     <logger name="org.apache.http.impl.execchain" level="OFF">

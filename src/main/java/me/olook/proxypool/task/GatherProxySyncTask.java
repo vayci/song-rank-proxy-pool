@@ -35,7 +35,7 @@ public class GatherProxySyncTask implements Runnable{
             List<HttpHost> httpHosts = provider.resolveProxy(payload);
             if(firstHost == null){ firstHost = httpHosts.get(0); }
             else if(!firstHost.equals(httpHosts.get(0))){
-                log.info("data change detected , sync ok .");
+                log.info("data change detected , sync ok");
                 scheduledPool.stopProxySyncTask();
                 scheduledPool.stopProxyGetTask();
                 scheduledPool.addProxyGetTask(properties.getGather().getInterval());

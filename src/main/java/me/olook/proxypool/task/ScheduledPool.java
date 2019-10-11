@@ -33,32 +33,32 @@ public class ScheduledPool {
     private static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     public void addPeriodSyncTask(){
-        log.info("[START] add period sync task .");
+        log.info("[START] add period sync task");
         scheduledExecutorService.scheduleAtFixedRate(periodSyncTask, 0, 6, TimeUnit.HOURS);
     }
 
     public void addProxySyncTask(){
-        log.info("[START] add proxy sync task .");
+        log.info("[START] add proxy sync task");
         proxySyncFuture = null;
         proxySyncFuture = scheduledExecutorService.
                 scheduleAtFixedRate(proxySyncTask, 0, 2, TimeUnit.SECONDS);
     }
 
     public void stopProxySyncTask(){
-        log.info("[STOP] stop proxy sync task .");
+        log.info("[STOP] stop proxy sync task");
         if (proxySyncFuture != null) {
             proxySyncFuture.cancel(true);
         }
     }
     public void addProxyGetTask(Integer period){
-        log.info("[START] add proxy get task .");
+        log.info("[START] add proxy get task");
         proxyGetFuture = null;
         proxyGetFuture = scheduledExecutorService
                 .scheduleAtFixedRate(gatherProxyGetTask, 0, period, TimeUnit.SECONDS);
     }
 
     public void stopProxyGetTask(){
-        log.info("[STOP] stop proxy get task .");
+        log.info("[STOP] stop proxy get task");
         if (proxyGetFuture != null) {
             proxyGetFuture.cancel(true);
         }

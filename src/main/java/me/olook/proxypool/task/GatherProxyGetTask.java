@@ -40,7 +40,7 @@ public class GatherProxyGetTask implements Runnable{
             }
             log.info("stop get data in page： {} , total {} pages",index,index-properties.getGather().getStartPage());
         }else{
-            log.info("proxy pool has reached the threshold .");
+            log.info("proxy pool has reached the threshold ");
         }
 
     }
