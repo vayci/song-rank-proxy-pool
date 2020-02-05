@@ -59,7 +59,7 @@ public class ProxyPoolProperties {
 
         private Integer endPage = 10;
 
-        private Integer interval = 180;
+        private Integer interval = 80;
 
     }
 }

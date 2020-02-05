@@ -2,7 +2,7 @@ package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
 import me.olook.proxypool.ProxyPoolProperties;
-import me.olook.proxypool.provider.impl.GatherProxyProvider;
+import me.olook.proxypool.provider.impl.ProxyListOrgProvider;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,23 +22,28 @@ public class GatherProxyGetTask implements Runnable{
     private ProxyPoolProperties properties;
 
     @Autowired
-    private GatherProxyProvider provider;
+    private ProxyListOrgProvider provider;
 
     @Override
     public void run() {
+        log.info("now time is {} , next round will begin at {}",
+                LocalDateTime.now(),LocalDateTime.now().plusSeconds(properties.getGather().getInterval()));
         if(provider.needFill()){
-            log.info("begin get data from page: {}",properties.getGather().getStartPage());
-            LocalDateTime end = LocalDateTime.now().plusMinutes(2).plusSeconds(15);
+            LocalDateTime end = LocalDateTime.now().plusMinutes(1);
             Integer index = properties.getGather().getStartPage();
             while (LocalDateTime.now().compareTo(end)<0){
-                String payload = provider.requestForPayload(index);
-                List<HttpHost> httpHosts = provider.resolveProxy(payload);
-                httpHosts.parallelStream().forEach(host->{
-                    provider.checkAndSaveProxy(host);
-                });
-                index++;
+                log.info("begin get data from page: {}",index);
+                try{
+                    String payload = provider.requestForPayload(index);
+                    List<HttpHost> httpHosts = provider.resolveProxy(payload);
+                    httpHosts.parallelStream().forEach(host->{
+                        provider.checkAndSaveProxy(host);
+                    });
+                    index++;
+                }catch (Exception e){
+                }
             }
-            log.info("stop get data in page： {} , total {} pages",index,index-properties.getGather().getStartPage());
+           log.info("stop get data in page： {} , total {} pages",index,index-properties.getGather().getStartPage());
         }else{
             log.info("proxy pool has reached the threshold ");
         }
