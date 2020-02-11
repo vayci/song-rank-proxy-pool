@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class GatherProxySyncTask implements Runnable{
+public class ProxySyncTask implements Runnable{
 
     @Autowired
     private ScheduledPool scheduledPool;

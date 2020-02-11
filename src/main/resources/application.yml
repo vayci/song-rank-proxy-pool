@@ -2,16 +2,15 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-    password: passwd
 proxy:
   key: proxypool
-  limit: 100
-  enable-vpn: false
+  limit: 200
+  enable-vpn: true
   vpn-host: 127.0.0.1
   vpn-port: 10809
   gather:
-    start-page: 1
+    start-page: 4
     interval: 180
   sync:
-    period-sync: true
-    proxy-sync: true
+    period-sync: false
+    proxy-sync: false

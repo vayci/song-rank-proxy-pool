@@ -14,7 +14,7 @@ public interface ProxyProvider {
      * 请求代理数据
      * @return HTML/JSON/TXT
      */
-    String requestForPayload();
+    String requestForPayload(Integer index);
 
     /**
      * 从载荷中解析代理数据
