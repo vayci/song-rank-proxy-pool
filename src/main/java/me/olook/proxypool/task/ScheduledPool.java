@@ -21,10 +21,10 @@ public class ScheduledPool {
     private PeriodSyncTask periodSyncTask;
 
     @Autowired
-    private GatherProxySyncTask proxySyncTask;
+    private ProxySyncTask proxySyncTask;
 
     @Autowired
-    private GatherProxyGetTask gatherProxyGetTask;
+    private ProxyGetTask proxyGetTask;
 
     private static ScheduledFuture<?> proxySyncFuture;
 
@@ -54,7 +54,7 @@ public class ScheduledPool {
         log.info("[START] add proxy get task");
         proxyGetFuture = null;
         proxyGetFuture = scheduledExecutorService
-                .scheduleAtFixedRate(gatherProxyGetTask, 0, period, TimeUnit.SECONDS);
+                .scheduleAtFixedRate(proxyGetTask, 0, period, TimeUnit.SECONDS);
     }
 
     public void stopProxyGetTask(){
