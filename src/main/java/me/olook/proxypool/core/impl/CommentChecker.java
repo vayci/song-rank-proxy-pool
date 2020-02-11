@@ -1,8 +1,8 @@
-package me.olook.proxypool.provider.impl;
+package me.olook.proxypool.core.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.olook.proxypool.netease.UserAgents;
-import me.olook.proxypool.provider.ProxyChecker;
+import me.olook.proxypool.core.ProxyChecker;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
@@ -67,7 +67,7 @@ public class CommentChecker implements ProxyChecker {
             response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("\"code\":200")){
-                log.info("checker pass {}",httpHost);
+                log.debug("checker pass {}",httpHost);
                 return true;
             }
         } catch (IOException e) {

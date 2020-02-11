@@ -2,9 +2,9 @@ package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
 import me.olook.proxypool.ProxyPoolProperties;
-import me.olook.proxypool.provider.ProxyChecker;
-import me.olook.proxypool.provider.ProxyProvider;
-import me.olook.proxypool.provider.ProxySink;
+import me.olook.proxypool.core.ProxyChecker;
+import me.olook.proxypool.core.ProxyProvider;
+import me.olook.proxypool.core.ProxySink;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

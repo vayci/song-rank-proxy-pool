@@ -1,7 +1,7 @@
-package me.olook.proxypool.provider.impl;
+package me.olook.proxypool.core.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.provider.ProxyProvider;
+import me.olook.proxypool.core.ProxyProvider;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;

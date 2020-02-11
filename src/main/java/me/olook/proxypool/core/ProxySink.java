@@ -1,4 +1,4 @@
-package me.olook.proxypool.provider;
+package me.olook.proxypool.core;
 
 import org.apache.http.HttpHost;
 
