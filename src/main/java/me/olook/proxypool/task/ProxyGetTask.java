@@ -28,7 +28,7 @@ public class ProxyGetTask implements Runnable{
     @Autowired
     private ProxyPoolProperties properties;
 
-    @Qualifier("proxyListOrgProvider")
+    @Qualifier("gatherProxyProvider")
     @Autowired
     private ProxyProvider provider;
 
@@ -49,7 +49,7 @@ public class ProxyGetTask implements Runnable{
         log.info("now time is {} , next round will begin at {}",
                 LocalDateTime.now(),LocalDateTime.now().plusSeconds(properties.getGather().getInterval()));
         if(needFill()){
-            LocalDateTime end = LocalDateTime.now().plusMinutes(1);
+            LocalDateTime end = LocalDateTime.now().plusSeconds(properties.getGather().getInterval());
             Integer index = properties.getGather().getStartPage();
             while (LocalDateTime.now().compareTo(end)<0){
                 log.info("begin get data from page: {}",index);
@@ -57,8 +57,8 @@ public class ProxyGetTask implements Runnable{
                     String payload = provider.requestForPayload(index);
                     List<HttpHost> httpHosts = provider.resolveProxy(payload);
                     httpHosts.parallelStream()
-                            //.filter(host-> checker1.check(host))
-                            .filter(host-> checker2.check(host))
+                            .filter(host-> checker1.check(host))
+                            //.filter(host-> checker2.check(host))
                     .forEach(httpHost -> sink.persistent(httpHost));
                     index++;
                 }catch (Exception e){
