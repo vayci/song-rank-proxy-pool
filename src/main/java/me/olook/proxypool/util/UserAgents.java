@@ -1,4 +1,4 @@
-package me.olook.proxypool.netease;
+package me.olook.proxypool.util;
 
 import java.util.Random;
 
@@ -7,6 +7,8 @@ import java.util.Random;
  * @date 2018-04-02 15:33
  */
 public class UserAgents {
+
+    private static Random random = new Random();
 
     private static String[] agents = {
             "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
@@ -47,10 +49,8 @@ public class UserAgents {
     };
 
     public static String randomUserAgent(){
-        Random random = new Random();
         int max = agents.length;
         int s = random.nextInt(max);
         return agents[s];
     }
-
 }

@@ -1,4 +1,4 @@
-package me.olook.proxypool;
+package me.olook.proxypool.config;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

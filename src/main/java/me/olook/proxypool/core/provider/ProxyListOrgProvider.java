@@ -1,4 +1,4 @@
-package me.olook.proxypool.core.impl;
+package me.olook.proxypool.core.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import me.olook.proxypool.core.ProxyProvider;
@@ -33,6 +33,8 @@ public class ProxyListOrgProvider implements ProxyProvider {
     @Autowired
     private CloseableHttpClient httpClient;
 
+    private static Pattern pattern = Pattern.compile("Proxy\\('(.*?)'\\)");
+
     @Override
     public String requestForPayload(Integer index) {
         String url = "https://proxy-list.org/english/index.php?p="+index;
@@ -50,8 +52,7 @@ public class ProxyListOrgProvider implements ProxyProvider {
     @Override
     public List<HttpHost> resolveProxy(String payload) {
         List<HttpHost> result = new ArrayList<HttpHost>();
-        String reg = "Proxy\\('(.*?)'\\)";
-        Matcher m = Pattern.compile(reg).matcher(payload);
+        Matcher m = pattern.matcher(payload);
         while (m.find()) {
             String r = m.group(1);
             String s = new String(Base64.decodeBase64(r));

@@ -26,6 +26,6 @@
 <!--    <logger name="me.olook.proxypool" level="DEBUG" additivity="false">-->
 <!--        <appender-ref ref="proxy_info" />-->
 <!--    </logger>-->
-    <logger name="org.apache.http.impl.execchain" level="OFF">
-    </logger>
+    <logger name="me.olook.proxypool.core" level="INFO"/>
+    <logger name="org.apache.http.impl.execchain" level="OFF"/>
 </configuration>

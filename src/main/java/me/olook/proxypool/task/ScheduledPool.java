@@ -41,7 +41,7 @@ public class ScheduledPool {
         log.info("[START] add proxy sync task");
         proxySyncFuture = null;
         proxySyncFuture = scheduledExecutorService.
-                scheduleAtFixedRate(proxySyncTask, 0, 2, TimeUnit.SECONDS);
+                scheduleAtFixedRate(proxySyncTask, 3, 3, TimeUnit.SECONDS);
     }
 
     public void stopProxySyncTask(){

@@ -1,8 +1,7 @@
-package me.olook.proxypool.core.impl;
+package me.olook.proxypool.core.provider;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.ProxyPoolProperties;
-import me.olook.proxypool.core.ProxyProvider;
+import me.olook.proxypool.config.ProxyPoolProperties;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class GatherProxyProvider  implements ProxyProvider {
+public class GatherProxyProvider {
 
     @Autowired
     private ProxyPoolProperties properties;
@@ -43,7 +42,7 @@ public class GatherProxyProvider  implements ProxyProvider {
     private CloseableHttpClient httpClient;
 
     public String requestForPayload(Integer index) {
-        String url = "http://proxygather.com/proxylist/anonymity/?t=Elite";
+        String url = "http://www.proxygather.com/proxylist/anonymity/?t=Elite";
         HttpPost request = new HttpPost(url);
         List<BasicNameValuePair> pairList = new ArrayList<BasicNameValuePair>();
         pairList.add(new BasicNameValuePair("Uptime", "0"));

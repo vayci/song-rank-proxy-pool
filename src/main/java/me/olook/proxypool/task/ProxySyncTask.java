@@ -1,8 +1,8 @@
 package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.ProxyPoolProperties;
-import me.olook.proxypool.core.impl.GatherProxyProvider;
+import me.olook.proxypool.config.ProxyPoolProperties;
+import me.olook.proxypool.core.provider.GatherProxyProvider;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,9 @@ public class ProxySyncTask implements Runnable{
                 scheduledPool.stopProxySyncTask();
                 scheduledPool.stopProxyGetTask();
                 scheduledPool.addProxyGetTask(properties.getGather().getInterval());
+                return;
             }
+            log.info("fetch data change ...");
         }
     }
 }

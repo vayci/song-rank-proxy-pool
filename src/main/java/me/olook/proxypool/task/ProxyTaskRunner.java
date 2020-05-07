@@ -1,6 +1,6 @@
 package me.olook.proxypool.task;
 
-import me.olook.proxypool.ProxyPoolProperties;
+import me.olook.proxypool.config.ProxyPoolProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

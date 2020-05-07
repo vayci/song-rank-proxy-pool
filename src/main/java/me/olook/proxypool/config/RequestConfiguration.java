@@ -2,7 +2,6 @@ package me.olook.proxypool.config;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.ProxyPoolProperties;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
@@ -20,11 +19,11 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Setter
 @Configuration
-public class HttpClientRequestConfig {
+public class RequestConfiguration {
 
     private final ProxyPoolProperties properties;
 
-    public HttpClientRequestConfig(ProxyPoolProperties properties) {
+    public RequestConfiguration(ProxyPoolProperties properties) {
         this.properties = properties;
     }
 
@@ -36,9 +35,10 @@ public class HttpClientRequestConfig {
     @Bean
     public CloseableHttpClient closeableHttpClient(){
         return HttpClientBuilder.create()
-                .setMaxConnTotal(200).setMaxConnPerRoute(20)
-                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(5000).build())
-                .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy()).build();
+                .setMaxConnTotal(100).setMaxConnPerRoute(10)
+                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(3000).build())
+                .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
+                .setConnectionManager(clientConnectionManager()).build();
     }
 
     @Bean
