@@ -1,12 +1,17 @@
 package me.olook.proxypool.core.checker;
 
 import lombok.extern.slf4j.Slf4j;
+<<<<<<< HEAD:src/main/java/me/olook/proxypool/core/checker/PlayRecordChecker.java
 import me.olook.proxypool.util.UserAgents;
+=======
+>>>>>>> 增加钉钉告警:src/main/java/me/olook/proxypool/core/impl/PlayRecordChecker.java
 import me.olook.proxypool.core.ProxyChecker;
+import me.olook.proxypool.netease.UserAgents;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -39,6 +44,7 @@ public class PlayRecordChecker implements ProxyChecker {
     public boolean check(HttpHost httpHost) {
         HttpPost request = new HttpPost(TEST_URL);
         RequestConfig requestConfig = RequestConfig.custom().setProxy(httpHost)
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .setConnectTimeout(3000).setSocketTimeout(3000).setConnectionRequestTimeout(3000)
                 .build();
         request.setConfig(requestConfig);
@@ -47,7 +53,6 @@ public class PlayRecordChecker implements ProxyChecker {
             HttpResponse response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("weekData")){
-                log.debug("{}",jsonResponse);
                 log.debug("checker pass {}",httpHost);
                 return true;
             }
