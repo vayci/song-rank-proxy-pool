@@ -1,12 +1,8 @@
 package me.olook.proxypool.core.checker;
 
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD:src/main/java/me/olook/proxypool/core/checker/PlayRecordChecker.java
-import me.olook.proxypool.util.UserAgents;
-=======
->>>>>>> 增加钉钉告警:src/main/java/me/olook/proxypool/core/impl/PlayRecordChecker.java
 import me.olook.proxypool.core.ProxyChecker;
-import me.olook.proxypool.netease.UserAgents;
+import me.olook.proxypool.util.UserAgents;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;

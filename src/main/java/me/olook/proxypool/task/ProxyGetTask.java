@@ -1,7 +1,7 @@
 package me.olook.proxypool.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.ProxyPoolProperties;
+import me.olook.proxypool.config.ProxyPoolProperties;
 import me.olook.proxypool.core.ProxyChecker;
 import me.olook.proxypool.core.ProxyProvider;
 import me.olook.proxypool.core.ProxySink;

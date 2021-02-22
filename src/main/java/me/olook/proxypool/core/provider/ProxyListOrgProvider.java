@@ -1,4 +1,4 @@
-package me.olook.proxypool.core.impl;
+package me.olook.proxypool.core.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import me.olook.proxypool.core.ProxyProvider;
