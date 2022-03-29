@@ -1,0 +1,84 @@
+{
+  "groups": [
+    {
+      "name": "proxy",
+      "type": "me.olook.proxypool.config.ProxyPoolProperties",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties"
+    },
+    {
+      "name": "proxy.gather",
+      "type": "me.olook.proxypool.config.ProxyPoolProperties$Gather",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "sourceMethod": "getGather()"
+    },
+    {
+      "name": "proxy.sync",
+      "type": "me.olook.proxypool.config.ProxyPoolProperties$Sync",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "sourceMethod": "getSync()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "proxy.enable-vpn",
+      "type": "java.lang.Boolean",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "proxy.gather.end-page",
+      "type": "java.lang.Integer",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties$Gather",
+      "defaultValue": 10
+    },
+    {
+      "name": "proxy.gather.interval",
+      "type": "java.lang.Integer",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties$Gather",
+      "defaultValue": 80
+    },
+    {
+      "name": "proxy.gather.start-page",
+      "type": "java.lang.Integer",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties$Gather",
+      "defaultValue": 1
+    },
+    {
+      "name": "proxy.key",
+      "type": "java.lang.String",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "defaultValue": "PROXY_POOL"
+    },
+    {
+      "name": "proxy.limit",
+      "type": "java.lang.Integer",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "defaultValue": 100
+    },
+    {
+      "name": "proxy.sync.period-sync",
+      "type": "java.lang.Boolean",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties$Sync",
+      "defaultValue": true
+    },
+    {
+      "name": "proxy.sync.proxy-sync",
+      "type": "java.lang.Boolean",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties$Sync",
+      "defaultValue": true
+    },
+    {
+      "name": "proxy.vpn-host",
+      "type": "java.lang.String",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "defaultValue": "127.0.0.1"
+    },
+    {
+      "name": "proxy.vpn-port",
+      "type": "java.lang.Integer",
+      "sourceType": "me.olook.proxypool.config.ProxyPoolProperties",
+      "defaultValue": 10808
+    }
+  ],
+  "hints": []
+}

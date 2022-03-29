@@ -19,13 +19,11 @@ public class RedisSink implements ProxySink {
 
     @Autowired
     private ProxyPoolProperties properties;
-
     @Autowired
     private RedisTemplate redisTemplate;
 
     @Override
     public void persistent(HttpHost httpHost) {
-        log.info("accept proxy {}",httpHost);
         redisTemplate.opsForList().leftPush(properties.getKey(),httpHost);
     }
 }

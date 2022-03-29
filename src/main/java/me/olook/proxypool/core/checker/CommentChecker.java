@@ -1,16 +1,13 @@
 package me.olook.proxypool.core.checker;
 
 import lombok.extern.slf4j.Slf4j;
-import me.olook.proxypool.util.UserAgents;
 import me.olook.proxypool.core.ProxyChecker;
 import org.apache.commons.codec.Charsets;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -70,20 +67,9 @@ public class CommentChecker implements ProxyChecker {
                 log.debug("checker pass {}",httpHost);
                 return true;
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return false;
-    }
-
-    private static void addNetEaseHeader(HttpRequestBase request){
-        request.setHeader(HttpHeaders.ACCEPT, "*/*");
-        request.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip,deflate,sdch");
-        request.setHeader(HttpHeaders.ACCEPT_LANGUAGE, "zh-CN,en-US;q=0.7,en;q=0.3");
-        request.setHeader(HttpHeaders.CONNECTION, "keep-alive");
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
-        request.setHeader(HttpHeaders.HOST, "music.163.com");
-        request.setHeader(HttpHeaders.REFERER, "http://music.163.com/");
-        request.setHeader(HttpHeaders.USER_AGENT, UserAgents.randomUserAgent());
     }
 
     private static List<BasicNameValuePair> addPostParam(Map<String,String> params){

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
+import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,24 +22,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RequestConfiguration {
 
-    private final ProxyPoolProperties properties;
-
-    public RequestConfiguration(ProxyPoolProperties properties) {
-        this.properties = properties;
-    }
-
     @Bean
     public PoolingHttpClientConnectionManager clientConnectionManager(){
-        return new PoolingHttpClientConnectionManager();
+        PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
+        manager.setMaxTotal(100);
+        manager.setDefaultMaxPerRoute(50);
+        HttpHost httpHost1 = new HttpHost("proxy-list.org",443);
+        HttpHost httpHost2 = new HttpHost("music.163.com",443);
+        manager.setMaxPerRoute(new HttpRoute(httpHost1),20);
+        manager.setMaxPerRoute(new HttpRoute(httpHost2),50);
+        return manager;
     }
 
     @Bean
     public CloseableHttpClient closeableHttpClient(){
         return HttpClientBuilder.create()
-                .setMaxConnTotal(100).setMaxConnPerRoute(10)
-                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(3000).build())
+                .setMaxConnTotal(100).setMaxConnPerRoute(50)
+                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(5000).build())
                 .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
-                .setConnectionManager(clientConnectionManager()).build();
+                .setConnectionManager(clientConnectionManager())
+                .build();
     }
 
     @Bean
@@ -49,7 +52,7 @@ public class RequestConfiguration {
             httpHost = new HttpHost(properties.getVpnHost(),properties.getVpnPort());
         }
         return RequestConfig.custom().setProxy(httpHost)
-                .setConnectTimeout(3000).setSocketTimeout(3000).setConnectionRequestTimeout(3000)
+                .setConnectTimeout(5000).setSocketTimeout(5000).setConnectionRequestTimeout(5000)
                 .build();
     }
 
