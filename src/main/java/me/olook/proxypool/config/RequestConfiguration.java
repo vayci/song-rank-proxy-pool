@@ -27,6 +27,7 @@ public class RequestConfiguration {
         PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
         manager.setMaxTotal(100);
         manager.setDefaultMaxPerRoute(50);
+        manager.setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(3000).build());
         HttpHost httpHost1 = new HttpHost("proxy-list.org",443);
         HttpHost httpHost2 = new HttpHost("music.163.com",443);
         manager.setMaxPerRoute(new HttpRoute(httpHost1),20);
@@ -38,7 +39,7 @@ public class RequestConfiguration {
     public CloseableHttpClient closeableHttpClient(){
         return HttpClientBuilder.create()
                 .setMaxConnTotal(100).setMaxConnPerRoute(50)
-                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(2500).build())
+                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(3000).build())
                 .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
                 .disableAutomaticRetries()
                 .setConnectionManager(clientConnectionManager())

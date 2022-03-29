@@ -25,9 +25,9 @@ public class ProxySchedule {
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>(),new DefaultThreadFactory("proxy"));
 
-    public static ExecutorService checkerService = new ThreadPoolExecutor(200, 200,
+    public static ExecutorService checkerService = new ThreadPoolExecutor(140, 140,
             0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(10),new DefaultThreadFactory("checker"),
+            new LinkedBlockingQueue<Runnable>(200),new DefaultThreadFactory("checker"),
             new ThreadPoolExecutor.DiscardOldestPolicy());
 
 //    public static ExecutorService checkerService = new ForkJoinPool(24);
