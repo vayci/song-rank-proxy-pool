@@ -10,6 +10,8 @@ import org.springframework.util.StopWatch;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static me.olook.proxypool.task.ProxySchedule.checkerService;
+
 /**
  * @author Red
  */
@@ -37,7 +39,7 @@ public class ProxyProviderJob implements Runnable{
         List<HttpHost> httpHosts = proxyProvider.resolveProxy(payload);
         log.info("begin index: {} => {}", index, httpHosts.size());
         httpHosts.forEach(x->{
-            CompletableFuture.runAsync(()->{
+            checkerService.submit(()->{
                 boolean check = proxyChecker.check(x);
                 if(check){
                     proxySink.persistent(x);

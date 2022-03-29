@@ -38,8 +38,9 @@ public class RequestConfiguration {
     public CloseableHttpClient closeableHttpClient(){
         return HttpClientBuilder.create()
                 .setMaxConnTotal(100).setMaxConnPerRoute(50)
-                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(5000).build())
+                .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(2500).build())
                 .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
+                .disableAutomaticRetries()
                 .setConnectionManager(clientConnectionManager())
                 .build();
     }
@@ -52,7 +53,7 @@ public class RequestConfiguration {
             httpHost = new HttpHost(properties.getVpnHost(),properties.getVpnPort());
         }
         return RequestConfig.custom().setProxy(httpHost)
-                .setConnectTimeout(5000).setSocketTimeout(5000).setConnectionRequestTimeout(5000)
+                .setConnectTimeout(3000).setSocketTimeout(3000).setConnectionRequestTimeout(3000)
                 .build();
     }
 

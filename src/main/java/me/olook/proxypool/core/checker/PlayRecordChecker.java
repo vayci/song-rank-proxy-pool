@@ -41,7 +41,7 @@ public class PlayRecordChecker implements ProxyChecker {
         HttpPost request = new HttpPost(TEST_URL);
         RequestConfig requestConfig = RequestConfig.custom().setProxy(httpHost)
                 .setCookieSpec(CookieSpecs.STANDARD)
-                .setConnectTimeout(3000).setSocketTimeout(3000).setConnectionRequestTimeout(3000)
+                .setConnectTimeout(2500).setSocketTimeout(2500).setConnectionRequestTimeout(2500)
                 .build();
         request.setConfig(requestConfig);
         addNetEaseHeader(request);
@@ -52,7 +52,8 @@ public class PlayRecordChecker implements ProxyChecker {
                 log.debug("checker pass {}",httpHost);
                 return true;
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            log.debug("checker error: {}",e.getMessage());
         }
         return false;
     }

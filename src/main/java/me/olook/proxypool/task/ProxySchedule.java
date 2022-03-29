@@ -25,6 +25,13 @@ public class ProxySchedule {
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>(),new DefaultThreadFactory("proxy"));
 
+    public static ExecutorService checkerService = new ThreadPoolExecutor(70, 70,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<Runnable>(70),new DefaultThreadFactory("checker"),
+            new ThreadPoolExecutor.DiscardOldestPolicy());
+
+//    public static ExecutorService checkerService = new ForkJoinPool(24);
+
     @Autowired
     private ProxyProvider proxyProvider;
     @Qualifier("playRecordChecker")
@@ -41,7 +48,9 @@ public class ProxySchedule {
     public void run(){
         Long size = redisTemplate.opsForList().size(properties.getKey());
         log.info("-------------------------------------------");
+        log.info("{}",checkerService);
         log.info("active pool size: {}", size);
+        log.info("-------------------------------------------");
         for (int i = 1; i < 11; i++) {
             ProxyProviderJob job = new ProxyProviderJob(i, proxyProvider, proxyChecker, proxySink);
             executorService.submit(job);
