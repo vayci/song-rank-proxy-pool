@@ -50,7 +50,7 @@ public class ProxyListOrgProvider implements ProxyProvider {
             HttpResponse response = httpClient.execute(request);
             return EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
         } catch (IOException e) {
-            log.error("data acquisition error , check your network , {}",e.getMessage());
+            log.error("data error [{}], {}", url, e.getMessage());
             dingTalkNotice.send(e.getMessage());
             try {
                 TimeUnit.SECONDS.sleep(10);
