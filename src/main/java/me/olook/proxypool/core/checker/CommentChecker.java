@@ -5,6 +5,7 @@ import me.olook.proxypool.core.ProxyChecker;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -51,6 +52,7 @@ public class CommentChecker implements ProxyChecker {
         builder.setConnectTimeout(3000);
         builder.setConnectionRequestTimeout(3000);
         builder.setSocketTimeout(3000);
+        builder.setCookieSpec(CookieSpecs.STANDARD);
         if(httpHost!=null){
             builder.setProxy(httpHost);
         }
@@ -64,7 +66,7 @@ public class CommentChecker implements ProxyChecker {
             response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("\"code\":200")){
-                log.debug("checker pass {}",httpHost);
+                log.debug("checker pass {} => {}",httpHost, jsonResponse);
                 return true;
             }
         } catch (IOException ignored) {

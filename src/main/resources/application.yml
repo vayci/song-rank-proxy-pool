@@ -5,7 +5,7 @@ spring:
     password:
 proxy:
   key: proxypool
-  limit: 200
-  enable-vpn: true
+  limit: 30
+  enable-vpn: false
   vpn-host: 127.0.0.1
-  vpn-port: 10809
+  vpn-port: 7890

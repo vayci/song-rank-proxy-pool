@@ -49,7 +49,7 @@ public class PlayRecordChecker implements ProxyChecker {
             HttpResponse response = httpClient.execute(request);
             String jsonResponse = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             if(jsonResponse.contains("weekData")){
-                log.debug("checker pass {}",httpHost);
+                log.debug("checker pass {} => {}",httpHost, jsonResponse);
                 return true;
             }
         } catch (IOException e) {

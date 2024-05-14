@@ -44,9 +44,15 @@ public class ProxySchedule {
     @Autowired
     private ProxyPoolProperties properties;
 
-    @Scheduled(fixedRate = 40 * 1000)
+    @Scheduled(fixedRate = 30 * 1000)
     public void run(){
         Long size = redisTemplate.opsForList().size(properties.getKey());
+        if(size!=null && size > properties.getLimit()){
+            log.info("-------------------------------------------");
+            log.info("active pool size: {}, skip", size);
+            log.info("-------------------------------------------");
+            return;
+        }
         log.info("-------------------------------------------");
         log.info("{}",checkerService);
         log.info("active pool size: {}", size);
